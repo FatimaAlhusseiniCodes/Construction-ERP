@@ -16,7 +16,7 @@ class PurchaseItem extends Model
     protected static function booted()
     {
         static::saving(function ($item) {
-            $item->subtotal = $item->qty * $item->unit_price;
+            $item->subtotal = ($item->qty ?? 0) * ($item->unit_price ?? 0);
         });
     }
 
