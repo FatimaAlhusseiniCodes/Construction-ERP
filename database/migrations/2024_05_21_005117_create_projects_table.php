@@ -13,11 +13,12 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id(); // id
 
-            // Link to Branch (Replacing company_id)
+          // Link to Branch (Making it nullable to fix the "default value" error)
             $table->foreignId('branch_id')
+                ->nullable() // Add this line
                 ->constrained('branches')
                 ->cascadeOnDelete();
-
+                
             $table->string('code')->unique(); // code
             $table->string('name'); // name
             
