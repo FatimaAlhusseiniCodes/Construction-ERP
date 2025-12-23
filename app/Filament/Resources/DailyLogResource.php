@@ -24,7 +24,8 @@ class DailyLogResource extends Resource
                 Forms\Components\Select::make('project_id')
                     ->relationship('project', 'name')
                     ->required()
-                    ->searchable(),
+                    ->searchable()
+                    ->preload(),
 
                 // 2. Select the log date (Defaults to today)
                 Forms\Components\DatePicker::make('log_date')
@@ -42,24 +43,25 @@ class DailyLogResource extends Resource
                     ->image()
                     ->directory('daily-logs')
                     ->columnSpanFull(),
-
-                // 5. Materials used repeater
-                Forms\Components\Repeater::make('materials')
-                    ->relationship('materials')
-                    ->schema([
-                        Forms\Components\Select::make('material_id')
-                            ->label('Material')
-                            ->relationship('materials', 'name')
-                            ->required()
-                            ->searchable(),
-                        
-                        Forms\Components\TextInput::make('quantity')
-                            ->numeric()
-                            ->required(),
-                    ])
-                    ->columns(2)
-                    ->columnSpanFull(),
-            ]);
+Forms\Components\Select::make('project_id')
+    ->relationship('project', 'name')
+    ->required(),
+              // 5. Materials used repeater
+Forms\Components\Repeater::make('materials')
+    ->schema([
+        Forms\Components\Select::make('material_id')
+            ->label('Material')
+            ->options(\App\Models\Material::all()->pluck('name', 'id'))
+            ->required()
+            ->searchable(),
+            
+        Forms\Components\TextInput::make('quantity')
+            ->numeric()
+            ->required()
+            ->default(1),
+    ])
+    ->columns(2)
+    ->columnSpanFull() ]);
     }
 
     public static function table(Table $table): Table

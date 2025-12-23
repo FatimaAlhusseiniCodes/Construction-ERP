@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
@@ -48,7 +49,16 @@ Forms\Components\Select::make('status')
     {
         return $table
             ->columns([
-                //
+              Tables\Columns\TextColumn::make('code')->searchable()->sortable(),
+            Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
+            Tables\Columns\TextColumn::make('client.name')->label('Client'),
+            Tables\Columns\TextColumn::make('budget')->money('usd'),
+            Tables\Columns\BadgeColumn::make('status')
+            ->colors([
+                    'warning' => 'active',
+                    'success' => 'completed',
+                    'danger' => 'on-hold',
+                ])
             ])
             ->filters([
                 //
@@ -66,7 +76,11 @@ Forms\Components\Select::make('status')
     public static function getRelations(): array
     {
         return [
+            // Link Daily Logs to the Project view to show them as a sub-section
            RelationManagers\DailyLogsRelationManager::class,
+           /* Link Tasks to the Project to manage specific work items */
+           RelationManagers\TasksRelationManager::class,
+           RelationManagers\MilestonesRelationManager::class , 
         ];
     }
 
@@ -76,6 +90,7 @@ Forms\Components\Select::make('status')
             'index' => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
             'edit' => Pages\EditProject::route('/{record}/edit'),
+            
         ];
     }
 }

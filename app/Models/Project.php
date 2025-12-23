@@ -70,4 +70,16 @@ class Project extends Model
     {
         return $this->hasMany(DailyLog::class);
     }
+    /* Define the relationship between Project and Tasks */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+      /* Define the relationship between Project and Milestones */
+    public function milestones()
+    {
+    return $this->hasMany(Milestone::class);
+    }
+    
 }

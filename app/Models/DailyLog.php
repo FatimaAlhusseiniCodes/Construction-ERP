@@ -16,6 +16,7 @@ class DailyLog extends Model
         'log_date',
         'description',
         'photos',
+        'materials_data',
     ];
 
     protected $casts = [
