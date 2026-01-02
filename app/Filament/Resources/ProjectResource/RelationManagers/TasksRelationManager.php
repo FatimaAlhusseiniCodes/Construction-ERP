@@ -33,6 +33,8 @@ class TasksRelationManager extends RelationManager
                 ->required()
                 ->searchable()
                 ->preload(),
+            Forms\Components\Hidden::make('status_id')
+                ->default(1),
         ]);
 }
 

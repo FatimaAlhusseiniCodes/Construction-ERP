@@ -16,6 +16,9 @@ class Timesheet extends Model
         'date' => 'date',
         'hours' => 'decimal:2',
     ];
+    protected $attributes = [
+    'company_id' => 2,
+];
 
     public function user(): BelongsTo
     {

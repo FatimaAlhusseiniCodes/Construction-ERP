@@ -58,7 +58,10 @@ class Task extends Model
         'checklist' => 'array',
         'percent_complete' => 'integer',
     ];
-
+    protected $attributes = [
+        'status_id' => 1,
+        'company_id' => 2,
+    ];
     protected static function boot()
     {
         parent::boot();
