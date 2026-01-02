@@ -63,4 +63,23 @@ class Project extends Model
             $query->where('client_id', $client);
         }
     }
+    /**
+     * Link to Daily Logs
+     */
+    public function dailyLogs(): HasMany
+    {
+        return $this->hasMany(DailyLog::class);
+    }
+    /* Define the relationship between Project and Tasks */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+      /* Define the relationship between Project and Milestones */
+    public function milestones()
+    {
+    return $this->hasMany(Milestone::class);
+    }
+    
 }
