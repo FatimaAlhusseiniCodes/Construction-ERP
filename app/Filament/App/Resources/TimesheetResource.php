@@ -19,32 +19,87 @@ class TimesheetResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }
+  public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+            // Select the user (worker) for this timesheet entry
+            Forms\Components\Select::make('user_id')
+                ->relationship('user', 'name')
+                ->required()
+                ->searchable(),
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            // Associate the entry with a specific project
+            Forms\Components\Select::make('project_id')
+                ->relationship('project', 'name')
+                ->required(),
+
+            // Select the specific task within the project
+           Forms\Components\Select::make('task_id')
+    ->relationship('task', 'title')
+    ->required()
+    ->createOptionForm([
+        Forms\Components\TextInput::make('title')
+            ->required(),
+        Forms\Components\Select::make('project_id')
+            ->relationship('project', 'name')
+            ->required(),
+        // Add this line to fix the "status_id" error
+        Forms\Components\Hidden::make('status_id')
+            ->default(1), // Assuming 1 is the ID for a default status like 'To Do'
+    ]),
+            // The date of work
+            Forms\Components\DatePicker::make('date')
+                ->required()
+                ->default(now()),
+
+            // Total decimal hours worked
+            Forms\Components\TextInput::make('hours')
+                ->numeric()
+                ->required(),
+        ]);
+}
+
+public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // Display User, Project, and Task in the list
+            Tables\Columns\TextColumn::make('user.name')
+                ->sortable()
+                ->searchable(),
+            
+            Tables\Columns\TextColumn::make('project.name')
+                ->sortable(),
+            
+            Tables\Columns\TextColumn::make('date')
+                ->date()
+                ->sortable(),
+
+            Tables\Columns\TextColumn::make('hours'),
+
+            // The status column for the approval process
+            Tables\Columns\BadgeColumn::make('status')
+                ->colors([
+                    'warning' => 'pending',
+                    'success' => 'approved',
+                    'danger' => 'rejected',
                 ]),
-            ]);
-    }
+        ])
+        ->actions([
+            // The "Approve" action satisfies the Approve Page requirement
+            Tables\Actions\Action::make('approve')
+                ->label('Approve')
+                ->icon('heroicon-o-check-circle')
+                ->color('success')
+                ->requiresConfirmation()
+                // Button only appears if record isn't approved yet
+                ->hidden(fn ($record) => $record->status === 'approved')
+                ->action(fn ($record) => $record->update(['status' => 'approved'])),
+
+            Tables\Actions\EditAction::make(),
+        ]);
+}
 
     public static function getRelations(): array
     {
@@ -61,4 +116,5 @@ class TimesheetResource extends Resource
             'edit' => Pages\EditTimesheet::route('/{record}/edit'),
         ];
     }
+    
 }
