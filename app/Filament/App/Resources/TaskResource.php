@@ -142,7 +142,6 @@ class TaskResource extends Resource
                             'name',
                             fn(Builder $query, Forms\Get $get) =>
                                 $query->byClient($get('client'))
-                                    ->where('active', true)
                                     ->orderBy('name')
 
                         )
@@ -223,7 +222,7 @@ class TaskResource extends Resource
                         ->options(
                             Status::orderBy('sort_order')->pluck('name', 'id')
                         )
-                        ->default(Status::orderBy('sort_order')->first()->id),
+                        ->default(Status::orderBy('sort_order')->first()?->id),
 
                     Forms\Components\TextInput::make('effort')
                         ->translateLabel()
@@ -1058,6 +1057,20 @@ class TaskResource extends Resource
                 ->wrap()
                 ->weight(FontWeight::Bold)
                 ->searchable(),
+            Tables\Columns\TextColumn::make('assignee.name')
+            ->label('Assigned To')
+            ->translateLabel()
+            ->sortable()
+            ->searchable()
+            ->toggleable(isToggledHiddenByDefault: false),
+
+        Tables\Columns\TextColumn::make('percent_complete')
+            ->label('Progress')
+            ->translateLabel()
+            ->suffix('%')
+            ->sortable()
+            ->color(fn ($state) => $state >= 100 ? 'success' : ($state >= 50 ? 'warning' : 'gray'))
+            ->toggleable(isToggledHiddenByDefault: false),
             Tables\Columns\TextColumn::make('due_date')
                 ->translateLabel()
                 ->description(fn() => $isMobile ? __('Due date') : null, 'above')

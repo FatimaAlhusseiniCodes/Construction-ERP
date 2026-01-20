@@ -156,6 +156,11 @@ class Task extends Model
         });
     }
 
+    public function scopeOrdered(Builder $query)
+    {
+        return $query->orderBy('due_date', 'asc')->orderBy('created_at', 'desc');
+    }
+
     public function scopeClosed(Builder $query)
     {
         $query->whereHas('status', function (Builder $query) {
