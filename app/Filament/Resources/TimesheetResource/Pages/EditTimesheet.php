@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\TimesheetResource\Pages;
+namespace App\Filament\App\Resources\TimesheetResource\Pages;
 
-use App\Filament\Resources\TimesheetResource;
+use App\Filament\App\Resources\TimesheetResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
