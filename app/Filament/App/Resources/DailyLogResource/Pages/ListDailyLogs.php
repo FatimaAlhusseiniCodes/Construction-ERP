@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\DailyLogResource\Pages;
+namespace App\Filament\App\Resources\DailyLogResource\Pages;
 
-use App\Filament\Resources\DailyLogResource;
+use App\Filament\App\Resources\DailyLogResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

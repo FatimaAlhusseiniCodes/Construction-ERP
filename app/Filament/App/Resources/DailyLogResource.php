@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
-use App\Filament\Resources\DailyLogResource\Pages;
+use App\Filament\App\Resources\DailyLogResource\Pages;
 use App\Models\DailyLog;
 use Filament\Forms;
 use Filament\Forms\Form;

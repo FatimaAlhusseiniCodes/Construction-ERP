@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Filament\Resources;
-
-use App\Filament\Resources\EmployeeResource\Pages;
+namespace App\Filament\App\Resources;
+use App\Filament\App\Resources\EmployeeResource\Pages;
 use App\Filament\Resources\EmployeeResource\RelationManagers;
 use App\Models\Employee;
 use Filament\Forms;
