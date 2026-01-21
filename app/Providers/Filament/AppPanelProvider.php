@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Enums\MenuGroupsEnum;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use App\Filament\App\Pages\Dashboard;
 use App\Http\Middleware\LocalizationMiddleware;
 use App\Http\Middleware\TenantMiddleware;
@@ -102,6 +103,9 @@ class AppPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
                 LocalizationMiddleware::class,
+            ])
+            ->plugins([
+                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
