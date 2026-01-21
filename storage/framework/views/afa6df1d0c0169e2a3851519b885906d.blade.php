@@ -1,0 +1,1 @@
+@livewire('top-navigate-action')

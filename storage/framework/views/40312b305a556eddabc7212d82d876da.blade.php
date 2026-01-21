@@ -1,0 +1,1 @@
+@livewire('work-sessions-top-nav')

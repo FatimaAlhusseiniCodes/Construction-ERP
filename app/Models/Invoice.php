@@ -26,13 +26,15 @@ class Invoice extends Model
         'status' => InvoiceStatusEnum::class,
     ];
 
-    protected function isOverdue(): Attribute
-    {
-        return Attribute::make(
-            get: fn() =>
-                $this->due_date->isPast() && $this->status != InvoiceStatusEnum::PAID,
-        );
-    }
+   protected function isOverdue(): Attribute
+{
+    return Attribute::make(
+        get: fn () =>
+            $this->due_date
+            && $this->due_date->isPast()
+            && $this->status != InvoiceStatusEnum::PAID,
+    );
+}
 
     public function company(): BelongsTo
     {
