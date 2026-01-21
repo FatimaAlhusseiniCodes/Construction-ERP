@@ -17,6 +17,23 @@ class Equipment extends Model
         'next_maintenance_at' => 'date',
     ];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Requirement: Automatic multi-tenant assignment
+            if (\Illuminate\Support\Facades\Auth::check() && empty($model->company_id)) {
+                $model->company_id = \Illuminate\Support\Facades\Auth::user()?->company_id;
+            }
+        });
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);

@@ -25,6 +25,7 @@ class Project extends Model
         'end_date',
         'budget',
         'status',
+        'company_id',
     ];
 
     protected $casts = [
@@ -55,8 +56,18 @@ class Project extends Model
         return $this->hasMany(Contract::class);
     }
 
-    // SCOPES
     
+    protected static function boot(): void
+{
+    parent::boot();
+
+    static::creating(function ($model) {
+        if (empty($model->code)) {
+            // Generates a code like PRJ-001
+            $model->code = 'PRJ-' . str_pad(static::count() + 1, 3, '0', STR_PAD_LEFT);
+        }
+    });
+}
     public function scopeByClient(Builder $query, Client|int|null $client)
     {
         if ($client) {

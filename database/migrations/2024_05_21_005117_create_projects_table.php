@@ -36,6 +36,7 @@ return new class extends Migration
             
             // status (e.g., 'active', 'completed', 'on-hold')
             $table->string('status')->default('active'); 
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
         });
