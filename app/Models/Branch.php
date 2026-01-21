@@ -3,37 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth; // Ensure this is imported
+use NunoMazer\Samehouse\BelongsToTenants;
 
 class Branch extends Model
 {
-    //we should add use HasFactory; here later if we need to use factories!!!!
+    use BelongsToTenants;
 
-    /**
-     * The attributes that are mass assignable.
-     * This allows these fields to be saved to the database.
-     */
     protected $fillable = [
-        'name',
-        'address',
-        'contact',
-        'is_active',
+        'name', 'address', 'contact', 'is_active', 'company_id',
     ];
 
-    /**
-     * The attributes that should be cast.
-     * This ensures 'is_active' is treated as a true/false boolean in your code.
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
-    // RELATIONSHIPS (We will add these later)
-    // A Branch hasMany Users
-    // A Branch hasMany Projects
-    public function projects(): HasMany
+    protected static function boot(): void
     {
-        return $this->hasMany(Project::class);
-    }
+        parent::boot();
 
+        static::creating(function ($model) {
+            // Check if a user is logged in to avoid errors during seeding or console commands
+            if (Auth::check()) {
+                // Directly assign the company_id from the authenticated user
+                $model->company_id = Auth::user()->company_id;
+            }
+        });
+    }
 }

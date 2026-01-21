@@ -6,39 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('stock_movements', function (Blueprint $table) {
             $table->id();
-
-            // What is moving?
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('material_id')->constrained()->cascadeOnDelete();
-            
-            // Where is it moving?
             $table->foreignId('from_branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->foreignId('to_branch_id')->nullable()->constrained('branches')->nullOnDelete();
-            
-            // Tenancy
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-
-            // Movement Details
+            $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
             $table->decimal('qty', 12, 2);
-            $table->string('type'); // in, out, transfer, adjustment
-            
-            // Reference to the source (e.g., Purchase Order ID or Task ID)
-            $table->unsignedBigInteger('reference_id')->nullable(); 
-            $table->string('reference_type')->nullable(); // To know if it's a PO or a Project usage
-
+            $table->string('type');
+            $table->string('reference')->nullable();
+            $table->text('reason')->nullable();
+            $table->date('movement_date');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stock_movements');
